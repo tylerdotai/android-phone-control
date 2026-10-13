@@ -1,0 +1,47 @@
+# DOCUMENTATION TEMPLATE ONLY. Not enforced or executable configuration.
+# Do not merge into Hermes config.yaml or Android settings.
+# Populate privately from explicit human consent; never include real values in a public bundle.
+# Empty values and example categories grant NO authority.
+template_version: "1.2"
+purpose: "Record a scoped Android USB or paired Wireless debugging session and verification decisions"
+enforced: false
+session:
+  host_platform: null  # Linux, macOS, or native Windows.
+  host_confirmed: false
+  device_serial: null  # Exact human-selected USB/wireless SERIAL; keep private.
+  transport_kind: null  # USB or paired Wireless debugging; no implied approval.
+  wireless_setup_approved: false
+  wireless_connection_endpoint: null  # Private IP:port, never a pairing code.
+  wireless_host_trust_confirmed: false
+  app: null
+  account: null
+  task: null
+  human_unlock_and_rsa_confirmed: false
+scope:
+  approved_navigation: []
+  approved_draft_text: null  # Non-secret only; keep private.
+  allow_replacing_existing_draft: false
+  draft_only: true
+  external_actions: []  # Record each exact approved target/payload and approval separately.
+  host_or_phone_changes: []  # No installation, settings, rules or groups implicitly authorized.
+evidence:
+  capture_consent: false
+  private_location: null
+  retention_agreed: null
+  public_bundle_must_exclude_evidence: true
+verification:
+  selected_transport: "not tested"
+  cable_free_after_usb_removal: "not tested"
+  shell_identity: "not tested"
+  unlocked_ui: "not tested"
+  hierarchy: "not tested"
+  screenshot: "not tested"
+  benign_navigation_readback: "not tested"
+  exact_draft_readback: "not tested"
+  mirroring: "not tested"
+  external_action_readback: "not tested"
+  submission_status: "not tested"
+closure:
+  blockers: []
+  revocation_offered: false
+  cleanup_approved: []
