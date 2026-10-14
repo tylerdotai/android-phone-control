@@ -141,6 +141,10 @@ For cable-free acceptance, first verify the wireless entry, then have the human 
 
 At closure, with approval use `adb disconnect "$CONNECT_ENDPOINT"` (Bash) or `adb disconnect "$ConnectEndpoint"` (PowerShell) for the exact host connection. This is an endpoint operation, not a `-s` shell operation. It does **not** revoke pairing. The human can forget the selected host under Wireless debugging or disable Wireless debugging. Unplugging USB is not wireless revocation; broad authorization revocation can affect other trusted hosts [ADB][adb].
 
+### Optional Tailscale route
+
+Use the [Tailscale endpoint workflow](setup-tailscale-wireless.md) only with already authorized clients/paired host trust, Android Wi-Fi, an explicitly confirmed peer IPv4 and the current TLS connection port. It includes Bash and native PowerShell endpoint guards, exact hardware-identity checks, fresh observation/input/readback, and targeted closure with no silent USB/LAN fallback. On Android 16/Linux, the explicitly selected Tailscale endpoint proved authorized non-root shell, USB-baseline identity, decoded screenshot/hierarchy and reversible Settings navigation/readback while both phones were on home Wi-Fi. This is not an off-LAN/cellular test, nor macOS/Windows runtime evidence. Physical USB removal must be verified separately.
+
 ## 4. Optional scrcpy: host routes and conservative launch
 
 [scrcpy upstream][scrcpy] documents Linux, macOS, and Windows, Android 5.0/API 21+ for normal screen mirroring, and Android 11+ for audio forwarding. Secure paired wireless in this reference still requires Android 11+. scrcpy requires no root and no persistent installed phone app; normal operation nevertheless runs a temporary server on the phone. A display-capable host session and working device encoding/host playback are separate prerequisites for visible mirroring.

@@ -1,6 +1,6 @@
 # Secure wireless setup on Linux
 
-Use Android's **Wireless debugging** pairing on Android 11 or newer. This is an optional alternative to USB, not internet-wide remote access. Obtain explicit approval to establish wireless trust and connect to the selected phone. Do not use legacy `adb tcpip 5555`, expose the host ADB server, forward router ports, disable firewalls, or install a persistent service.
+Use Android's **Wireless debugging** pairing on Android 11 or newer. This is an optional alternative to USB, not internet-wide remote access. For an already authorized tailnet, use the separate [Tailscale endpoint workflow](setup-tailscale-wireless.md); Android still requires Wi-Fi and paired host trust. Obtain explicit approval to establish wireless trust and connect to the selected phone. Do not use legacy `adb tcpip 5555`, expose the host ADB server, forward router ports, disable firewalls, or install a persistent service.
 
 ## Discover and authorize
 
@@ -53,7 +53,7 @@ Use the same [navigation and text](navigation-and-text.md), [evidence ladder](sa
 ## Reconnect and close
 
 - Pairing trust can persist, but connectivity does not necessarily persist after reboot, Wi-Fi changes, Wireless debugging toggles, idle behavior or IP/port changes. Read the current endpoint and reconfirm the selected phone before reconnecting. Re-pair only when trust is actually missing.
-- Do not promise access from another network or while the phone is locked. This procedure has no VPN, public relay, router forwarding or unattended unlock.
+- Do not promise access from another network or while the phone is locked. This LAN procedure does not configure a VPN, public relay, router forwarding or unattended unlock. The optional Tailscale route has its own explicit conditions and endpoint verification; neither route promises cellular-only operation.
 - With approval, disconnect only this endpoint:
 
   ```bash

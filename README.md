@@ -14,7 +14,7 @@
   </a>
   <h1 align="center">Android phone control</h1>
   <p align="center">
-    An Agent Skill for authorized Android navigation and verified draft entry over USB or paired Wi-Fi on Linux, macOS, or native Windows.
+    An Agent Skill for authorized Android navigation and verified draft entry over USB or paired Wi-Fi, with an optional Tailscale endpoint route, on Linux, macOS, or native Windows.
     <br />
     <a href="SKILL.md"><strong>Read the procedure »</strong></a>
     <br /><br />
@@ -134,11 +134,11 @@ Review [SKILL.md](SKILL.md), the [references](references/installation-and-sharin
 
    Resolve conflicts deliberately rather than adding an overwrite flag. Inspect source files for symlinks or unexpected content first. A failed copy can leave a partial destination; inspect it before deciding how to recover.
 
-   For a native Windows Agent Skill consumer, use that consumer's supported installation procedure and copy only the ten payload files in the layout table, preserving `references/` and `templates/`. This Bash recipe does not certify native Windows support for Hermes itself.
+   For a native Windows Agent Skill consumer, use that consumer's supported installation procedure and copy only the eleven payload files in the layout table, preserving `references/` and `templates/`. This Bash recipe does not certify native Windows support for Hermes itself.
 
 4. In the same intended profile, run `hermes skills list`, then load `/android-phone-control` in chat. Check that the loaded skill and supporting files match the inspected source. Use a fresh session if discovery is stale; see the maintained [Hermes skills documentation][hermes-skills-url].
 
-Do not merge `templates/session-policy.yaml` into Hermes `config.yaml` or Android settings. It is documentation only. This installation does not copy `.git`, images, CI files, repository validation tools, or device evidence into the skills directory. Other consumers should use their documented discovery procedure while preserving the same ten-file payload and relative paths.
+Do not merge `templates/session-policy.yaml` into Hermes `config.yaml` or Android settings. It is documentation only. This installation does not copy `.git`, images, CI files, repository validation tools, or device evidence into the skills directory. Other consumers should use their documented discovery procedure while preserving the same eleven-file payload and relative paths.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -202,9 +202,11 @@ adb connect "$CONNECT_ENDPOINT"
 adb devices -l
 ```
 
+For an already authorized tailnet, follow the complete [Tailscale endpoint workflow](references/setup-tailscale-wireless.md) instead of substituting addresses blindly. Android must remain on Wi-Fi. Confirm the literal peer IPv4 and current main-page TLS connection port; run the Bash/native PowerShell guard, compare exact private hardware identity, and verify fresh hierarchy/image plus approved navigation/readback through that exact endpoint. No silent USB/LAN fallback. This route was exercised on Android 16/Linux with phone and controller on home Wi-Fi, including navigation and restoration after physical USB removal; off-LAN and cellular-only operation are not claimed. [Automatic shutdown and safe recovery are tracked in issue #1](https://github.com/tylerdotai/android-phone-control/issues/1).
+
 Set `SERIAL` to the exact verified wireless entry, then use `adb -s "$SERIAL"` for every phone operation and `scrcpy --serial "$SERIAL"` for mirroring. Verify the same physical phone, non-root shell and fresh UI before unplugging. After the human removes USB, require the USB entry absent and repeat benign navigation/readback over wireless. No silent USB fallback.
 
-Pairing and connection ports differ and can change. Empty mDNS discovery does not rule out manual connection to the verified displayed endpoint. Recheck after network/reboot/toggle changes. There is no internet relay, root or unattended unlock. With approval, `adb disconnect "$CONNECT_ENDPOINT"` targets this host connection but does not revoke pairing; the human can forget the selected host or disable Wireless debugging. Unplugging USB is not wireless revocation.
+Pairing and connection ports differ and can change. Empty mDNS discovery does not rule out manual connection to the verified displayed endpoint. Recheck after network/reboot/toggle changes. The LAN route configures no internet relay, root or unattended unlock; the optional authorized Tailscale route does not bypass Android trust or lock state. With approval, `adb disconnect "$CONNECT_ENDPOINT"` targets this host connection but does not revoke pairing; the human can forget the selected host or disable Wireless debugging. Unplugging USB is not wireless revocation.
 
 ### Observe, navigate, and verify a draft
 
@@ -248,9 +250,9 @@ python3 tools/validate.py
 python3 tools/verify_e2e.py --output .artifacts/e2e.json
 ```
 
-The validator checks documentation/package structure, metadata and descriptive YAML, local links/anchors/images, shell and embedded-Python syntax, public-content constraints, and archive safety. The E2E command exercises the repository validation boundary against valid and deliberately invalid trees and writes a repeatable JSON result artifact. CI uses the same commands; it does not connect to a phone or require phone secrets.
+The validator checks documentation/package structure, metadata and descriptive YAML, local links/anchors/images, shell and embedded-Python syntax, public-content constraints, and archive safety. The E2E command exercises the real repository validation CLI against valid and deliberately invalid trees/skill archives and executes only the pure Bash endpoint guard against accepted and malformed inputs, writing a repeatable JSON result artifact. It never runs ADB, phone, connection or screenshot snippets. PowerShell remains static-reviewed, not parsed or executed by this Linux lane. Run `make check` for the complete local gate. CI uses the same commands; it does not connect to a phone or require phone secrets.
 
-These checks do **not** prove device authorization, navigation, draft fidelity, or stream compatibility. Phone acceptance requires the live evidence ladder in [safety and verification](references/safety-and-verification.md). USB and paired wireless workflows have been exercised on one Android 16 device with a Linux x86_64 host, including navigation after physical cable removal; exact draft entry was exercised over USB, not separately over wireless. This is not wireless reboot/reconnection coverage; that is not an OEM/version compatibility matrix or a guarantee for another device. This README contains no raw device evidence or fabricated screenshots.
+These checks do **not** prove device authorization, navigation, draft fidelity, or stream compatibility. Phone acceptance requires the live evidence ladder in [safety and verification](references/safety-and-verification.md). USB and paired wireless workflows have been exercised on one Android 16 device with a Linux x86_64 host, including navigation after physical cable removal; exact draft entry was exercised over USB, not separately over wireless. This is not wireless reboot/reconnection coverage; that is not an OEM/version compatibility matrix or a guarantee for another device. The separate Tailscale endpoint acceptance verified current paired TLS transport, non-root shell, exact USB-baseline identity, decoded screenshot/hierarchy, and reversible Settings navigation/restoration through the explicit peer endpoint on Linux/Android 16. Both phones were on home Wi-Fi; physical USB-removal acceptance for this route is separate, and no off-LAN/cellular-only coverage is claimed. This README contains no raw device evidence or fabricated screenshots.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -262,6 +264,7 @@ These checks do **not** prove device authorization, navigation, draft fidelity, 
 | [`references/android-host-platforms.md`](references/android-host-platforms.md) | Linux/macOS/native Windows setup, guarded shell examples and evidence matrix | Yes |
 | [`references/setup-linux-usb.md`](references/setup-linux-usb.md) | Discovery, trust, Linux permissions, optional scrcpy setup | Yes |
 | [`references/setup-linux-wireless.md`](references/setup-linux-wireless.md) | Android 11+ paired Wi-Fi, endpoint selection, cable-free verification and revocation | Yes |
+| [`references/setup-tailscale-wireless.md`](references/setup-tailscale-wireless.md) | Optional paired TLS endpoint through an authorized tailnet: Wi-Fi, guards, exact hardware identity, readback and revocation | Yes |
 | [`references/navigation-and-text.md`](references/navigation-and-text.md) | Observation, targeting, quoting, exact draft readback | Yes |
 | [`references/safety-and-verification.md`](references/safety-and-verification.md) | Consent, evidence ladder, closure | Yes |
 | [`references/troubleshooting.md`](references/troubleshooting.md) | Symptom-specific checks and bounded recovery | Yes |
@@ -272,7 +275,7 @@ These checks do **not** prove device authorization, navigation, draft fidelity, 
 | `images/` | Original logo and workflow illustrations, SVG/PNG | No |
 | `tools/`, `.github/workflows/validate.yml` | Repository/package validation and CI | No |
 
-The installed payload has ten files and no helper binaries or scripts. Preserve the directory names and relative links. A shared skill-only archive should contain those files under `android-phone-control/`, with no symlinks, traversal paths, keys, captures, logs, account names, live serials, or private receipts. Inspect its manifest/CRC and compute its SHA-256 before delivery. A source ZIP and a skill-only archive serve different purposes; neither implies a published release or registry listing.
+The installed payload has eleven files and no helper binaries or scripts. Preserve the directory names and relative links. A shared skill-only archive should contain those files under `android-phone-control/`, with no symlinks, traversal paths, keys, captures, logs, account names, live serials, or private receipts. Inspect its manifest/CRC and compute its SHA-256 before delivery. A source ZIP and a skill-only archive serve different purposes; neither implies a published release or registry listing.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -307,11 +310,10 @@ After one targeted, approved correction and fresh observation, stop on repeated 
 - [x] Document observation-first navigation and exact non-secret draft verification.
 - [x] Include optional mirroring, bounded troubleshooting, and a descriptive session checklist.
 - [x] Document paired Android 11+ Wireless debugging and verify cable-free navigation on one device.
-- [x] Provide a portable ten-file skill payload with an MIT license.
-- [ ] Gather sanitized, consented evidence for additional Android/OEM combinations.
-- [ ] Investigate exact Unicode/IME input behavior in benign fields.
+- [x] Provide a portable eleven-file skill payload with an MIT license.
+- [x] Document and exercise the optional explicit Tailscale paired-TLS endpoint route on Android Wi-Fi with identity checks and navigation/readback.
 
-Unchecked items are proposed research directions, not supported features or delivery promises. Use [issues][issues-url] for proposals and reported limitations.
+This checklist records delivered workflows, not an OEM-wide compatibility guarantee. Use [issues][issues-url] for proposals and reported limitations.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

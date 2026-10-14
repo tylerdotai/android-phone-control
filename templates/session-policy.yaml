@@ -2,7 +2,7 @@
 # Do not merge into Hermes config.yaml or Android settings.
 # Populate privately from explicit human consent; never include real values in a public bundle.
 # Empty values and example categories grant NO authority.
-template_version: "1.2"
+template_version: "1.3"
 purpose: "Record a scoped Android USB or paired Wireless debugging session and verification decisions"
 enforced: false
 session:
@@ -13,6 +13,11 @@ session:
   wireless_setup_approved: false
   wireless_connection_endpoint: null  # Private IP:port, never a pairing code.
   wireless_host_trust_confirmed: false
+  tailnet_route_approved: false
+  tailnet_peer_ip: null  # Human-confirmed literal peer IPv4; keep private.
+  tailnet_incoming_allowed_confirmed: false
+  android_wifi_connected_confirmed: false
+  expected_hardware_identity: null  # Exact privately verified baseline, not model name.
   app: null
   account: null
   task: null
@@ -32,6 +37,9 @@ evidence:
 verification:
   selected_transport: "not tested"
   cable_free_after_usb_removal: "not tested"
+  tailnet_selected_endpoint: "not tested"
+  exact_hardware_identity_match: "not tested"
+  tailnet_navigation_readback: "not tested"
   shell_identity: "not tested"
   unlocked_ui: "not tested"
   hierarchy: "not tested"

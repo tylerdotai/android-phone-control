@@ -19,7 +19,7 @@ import zlib
 
 REQUIRED = ["SKILL.md", "LICENSE", "README.md", "templates/session-policy.yaml"] + [
     "references/" + name + ".md" for name in (
-        "setup-linux-usb", "setup-linux-wireless", "android-host-platforms", "navigation-and-text", "safety-and-verification",
+        "setup-linux-usb", "setup-linux-wireless", "setup-tailscale-wireless", "android-host-platforms", "navigation-and-text", "safety-and-verification",
         "troubleshooting", "installation-and-sharing")]
 BUNDLE = set(REQUIRED) - {"README.md"}
 IGNORED = {".git", ".artifacts", ".venv", "__pycache__"}
@@ -274,7 +274,7 @@ class Validator:
                 value = self.yaml(text, path)
                 if relative.as_posix() == "templates/session-policy.yaml" and value is not None:
                     session = value.get("session", {}) if isinstance(value, dict) else {}
-                    if not isinstance(value, dict) or value.get("enforced") is not False or not isinstance(session, dict) or any(session.get(key) is not None for key in ("device_serial", "app", "account", "task")):
+                    if not isinstance(value, dict) or value.get("enforced") is not False or not isinstance(session, dict) or any(session.get(key) is not None for key in ("device_serial", "app", "account", "task", "wireless_connection_endpoint", "tailnet_peer_ip", "expected_hardware_identity")):
                         self.error("policy", path, "Policy must be unenforced and contain no live session values")
             if path.suffix.lower() == ".md":
                 self.markdown[path] = self.fences(text, path)
@@ -283,6 +283,17 @@ class Validator:
                     compile(text, str(relative), "exec")
                 except SyntaxError:
                     self.error("python", path, "Invalid repository Python syntax")
+        tailnet = self.root / "references/setup-tailscale-wireless.md"
+        if tailnet in self.markdown:
+            text = tailnet.read_text()
+            # Required documentation contract, not proof of runtime reachability.
+            required = ("## Conditions", "## Current endpoint", "## Bind and read back",
+                        "## Reconnect and revoke", "## Verified scope", "<!-- endpoint-guard-bash -->",
+                        "<!-- endpoint-guard-powershell -->", "EXPECTED_HARDWARE_ID", "ro.serialno",
+                        'adb -s "$TAILNET_ENDPOINT"', 'adb -s "$TailnetEndpoint"',
+                        "No silent USB or LAN fallback", "mDNS", "Wi-Fi", "cellular")
+            if any(token not in text for token in required):
+                self.error("tailscale", tailnet, "Incomplete Tailscale endpoint, identity, readback, safety or evidence contract")
         skill = self.root / "SKILL.md"
         if skill in self.markdown:
             match = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|$)", skill.read_text(), re.S)

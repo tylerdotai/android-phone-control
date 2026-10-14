@@ -1,6 +1,6 @@
 # Installation and sharing
 
-This is a portable Agent Skill, not an Android app or executable agent service. It consists of `SKILL.md`, seven reference documents, a descriptive YAML template, and an MIT license. It requires no companion local skills, scripts or bundled binaries. Runtime tools are discovered when the workflow runs; installing the skill does not install ADB/scrcpy or authorize a phone.
+This is a portable Agent Skill, not an Android app or executable agent service. It consists of `SKILL.md`, eight reference documents, a descriptive YAML template, and an MIT license. It requires no companion local skills, scripts or bundled binaries. Runtime tools are discovered when the workflow runs; installing the skill does not install ADB/scrcpy or authorize a phone.
 
 ## Install locally
 
